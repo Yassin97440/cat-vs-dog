@@ -31,7 +31,6 @@ async def predict(file: UploadFile = File(...)):
     image = Image.open(io.BytesIO(await file.read()))
     input_data = preprocess_image(image)
     prediction = model.predict(input_data)
-    print(prediction)
     
     # Convertir la prédiction en valeur flottante pour la sérialisation JSON
     prediction_value = float(prediction[0][0]) if prediction.ndim > 1 else float(prediction[0])
@@ -43,6 +42,6 @@ async def predict(file: UploadFile = File(...)):
         predict_animal='Chat'
     
     return {
-        "classe": predict_animal,
-        "confiance": prediction_value
+        "class_name": predict_animal,
+        "confidence": prediction_value
     }
