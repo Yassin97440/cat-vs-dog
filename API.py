@@ -42,6 +42,6 @@ async def predict(file: UploadFile = File(...)):
         predict_animal='Chat'
     
     return {
-        "class_name": predict_animal,
+        "className": predict_animal,
         "confidence": prediction_value
     }
