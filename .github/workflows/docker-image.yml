@@ -1,0 +1,44 @@
+name: FastAPI Docker Image CI
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: |
+          docker build . --file Dockerfile --tag fastapi-cat-dog:${{ github.run_number }}
+        env:
+          TAG: ${{ github.run_number }}
+
+      - name: Save Docker image to a file
+        run: docker save fastapi-cat-dog:${{ github.run_number }} | gzip > fastapi-cat-dog.tar.gz
+
+      - name: Transfer Docker image to VM
+        uses: appleboy/scp-action@master
+        with:
+          source: "fastapi-cat-dog.tar.gz"
+          target: "~/app/api/"
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Deploy Docker image on VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ~/app/api
+            docker load < fastapi-cat-dog.tar.gz
+            docker stop fastapi-cat-dog || true
+            docker rm fastapi-cat-dog || true
+            docker run -d -p 8000:8000 --name fastapi-cat-dog fastapi-cat-dog:${{ github.run_number }}
