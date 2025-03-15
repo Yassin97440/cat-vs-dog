@@ -43,8 +43,8 @@ def normalize_and_prepare_prediction(prediction_value):
     # Conversion en pourcentage
     prediction_value = confidence * 100
     return {
-        prediction_value,
-        predict_animal
+        predict_animal,
+        prediction_value
     }
 
 @app.post("/predict/")
