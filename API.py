@@ -41,7 +41,7 @@ def normalize_and_prepare_prediction(prediction_value):
         confidence = prob_chat
     print("pred name :", predict_animal)
     # Conversion en pourcentage
-    prediction_value = confidence * 100
+    prediction_value = round(confidence * 100, 3)
     print("proba : ", prediction_value)
     return  predict_animal, prediction_value
     
