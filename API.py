@@ -39,13 +39,12 @@ def normalize_and_prepare_prediction(prediction_value):
     else:
         predict_animal='Chat'
         confidence = prob_chat
-    
+    print("pred name :", predict_animal)
     # Conversion en pourcentage
     prediction_value = confidence * 100
-    return {
-        predict_animal,
-        prediction_value
-    }
+    print("proba : ", prediction_value)
+    return  predict_animal, prediction_value
+    
 
 @app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
@@ -58,6 +57,7 @@ async def predict(file: UploadFile = File(...)):
     
     predict_animal, prediction_value = normalize_and_prepare_prediction(prediction_value)
     
+    print("name : ",predict_animal,"proba", prediction_value)
     return {
         "className": predict_animal,
         "confidence": prediction_value
