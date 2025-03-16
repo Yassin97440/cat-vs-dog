@@ -1,5 +1,8 @@
 # Cat vs Dog Classifier
 
+### Démonstration
+Une démonstration en ligne est disponible [ici](https://yassin.abdulla.fr/lab/cat-vs-dog).
+
 Je fais ce projet dans le cadre de mon auto-formation. Après avoir suivi une série de vidéo de MachineLearnia qui explique certains principes fondamentaux du machine et deep learning.
 
 ## 1. Classification Chat vs Chien - Approche native
@@ -36,48 +39,26 @@ J'ai expérimenté avec différentes architectures et hyperparamètres :
 - Implémentation de techniques de régularisation (dropout, batch normalization)
 
 ### Transfer Learning
-Face aux limitations en termes de données et de puissance de calcul, j'ai opté pour le transfert d'apprentissage :
+Face aux limitations en termes de données et de puissance de calcul, j'ai vu une autre solution dans le traitement d'image qui est le transfert d'apprentissage :
 - Utilisation d'un modèle pré-entraîné (MobileNet/VGG/ResNet)
 - Fine-tuning des dernières couches pour adapter le modèle à ma classification binaire
 - Amélioration significative des performances (précision >95%)
 - Réduction considérable du temps d'entraînement
 - Optimisation de la taille du modèle final pour le déploiement
 
-## 3. Déploiement avec FastAPI
-
+## 3. Utilisation de FastAPI
 Pour rendre mon modèle accessible et utilisable, j'ai développé une API simple avec FastAPI.
 
 ### Fonctionnalités
 - Endpoint pour télécharger une image et obtenir une prédiction
+- Documentation automatique avec Swagger
 - Prétraitement automatique des images soumises
 - Réponse JSON avec la classe prédite et le niveau de confiance
 
-### Implémentation
-```python
-@app.post("/predict/")
-async def predict(file: UploadFile = File(...)):
-    image = Image.open(io.BytesIO(await file.read()))
-    input_data = preprocess_image(image)
-    prediction = model.predict(input_data)
-    
-    prediction_value = float(prediction[0][0]) if prediction.ndim > 1 else float(prediction[0])
-    
-    predict_animal = 'Chat' if prediction_value <= 0.5 else 'Chien'
-    
-    return {
-        "classe": predict_animal,
-        "confiance": prediction_value
-    }
-```
-
-### Déploiement
-- Installation simple avec pip
-- Documentation automatique via Swagger UI
-- Possibilité de déployer sur différentes plateformes (Heroku, AWS, etc.)
 
 ## Conclusion
 
-Ce projet m'a permis d'explorer le cycle complet du développement d'un modèle de deep learning, de la compréhension des concepts fondamentaux jusqu'au déploiement d'une solution fonctionnelle. J'ai pu constater l'efficacité des réseaux convolutifs et du transfer learning pour la classification d'images, ainsi que la facilité de mise en production avec des outils modernes comme FastAPI.
+Ce projet m'a permis d'explorer le cycle complet du développement d'un modèle de deep learning, de la compréhension des concepts fondamentaux jusqu'au déploiement d'une solution fonctionnelle. J'ai pu constater l'efficacité des réseaux convolutifs et du transfer learning pour la classification d'images, ainsi que la facilité de mise en production avec des outils comme FastAPI (FastAPI qui correspond bien àç mon besoin qui est simple).
 
 ## Prochaines étapes
 - Amélioration de l'interface utilisateur
