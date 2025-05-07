@@ -41,4 +41,4 @@ jobs:
             docker load < fastapi-cat-dog.tar.gz
             docker stop fastapi-cat-dog || true
             docker rm fastapi-cat-dog || true
-            docker run -d -p 8000:8000 --name fastapi-cat-dog fastapi-cat-dog:${{ github.run_number }}
+            docker run -d -p 8000:8000 --network https-net --name fastapi-cat-dog fastapi-cat-dog:${{ github.run_number }}
